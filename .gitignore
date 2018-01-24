@@ -1,0 +1,17 @@
+# Created by .ignore support plugin (hsz.mobi)
+### Example user template template
+.DS_Store
+
+### Example user template
+
+# IntelliJ project files
+.idea
+*.iml
+out
+gen
+
+application/*
+container/db/data/*
+
+# ssl key
+container/app/config/ssl/apache*

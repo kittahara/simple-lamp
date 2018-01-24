@@ -1,0 +1,60 @@
+version: '2'
+
+services:
+
+  # Application
+  sl-app:
+    container_name: sl-app
+    build: ./container/app
+    ports:
+      - "80:80"
+      - "443:443"
+    working_dir: /usr/src/application
+    volumes:
+      - ./application:/usr/src/application
+    environment:
+      TZ: JST-9
+    depends_on:
+      - sl-db
+      - sl-maildev
+
+  # DB
+  sl-db:
+    container_name: sl-db
+    build: ./container/db
+    ports:
+      - "3306:3306"
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - ./container/db/data:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: example
+      MYSQL_USER: mysql
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: password
+      TZ: JST-9
+
+  # DB GUI
+  sl-adminer:
+    container_name: sl-adminer
+    image: adminer
+    ports:
+      - "8080:8080"
+    environment:
+      TZ: JST-9
+    depends_on:
+      - sl-db
+
+  # Mail
+  sl-maildev:
+    container_name: sl-maildev
+    image: djfarrelly/maildev
+    ports:
+      - "1080:80"
+      - "25:25"
+    expose:
+      - "80"
+      - "25"
+    command: bin/maildev --web 80 --smtp 25
+    environment:
+      TZ: JST-9

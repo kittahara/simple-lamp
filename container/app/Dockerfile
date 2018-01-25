@@ -7,10 +7,6 @@ MAINTAINER kittahara
 
 COPY /config/*.conf /etc/apache2/sites-enabled/
 
-# https enable
-COPY /config/admin-ssl.conf /etc/apache2/sites-enabled/
-COPY /config/default-ssl.conf /etc/apache2/sites-enabled/
-
 # :TODO debug page
 COPY /config/index.php /var/www/html/index.php
 RUN echo "phpinfo();" >> /var/www/html/index.php

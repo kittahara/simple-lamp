@@ -8,5 +8,5 @@ MAINTAINER kittahara
 RUN apt-get update
 RUN apt-get install  -y vim
 
-# 初期化SQLのセット
+# initialize query
 #COPY config/sql/*.sql /docker-entrypoint-initdb.d/

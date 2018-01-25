@@ -24,5 +24,16 @@ RUN docker-php-ext-install pdo pdo_mysql mbstring tokenizer xml gd pcntl zip
 # mod_rewrite,openssl enable
 RUN a2enmod rewrite ssl
 
-RUN apt-get install  -y vim
-RUN apt-get install  -y git unzip telnet net-tools
+RUN apt-get install  -y sudo vim git unzip telnet net-tools wget gnupg
+
+# composer install
+RUN curl -sS https://getcomposer.org/installer | php
+RUN mv composer.phar /usr/local/bin/composer
+RUN composer self-update
+RUN composer --version
+
+# node,npm install
+RUN curl -sL https://deb.nodesource.com/setup_9.x | bash -
+RUN apt-get install -y nodejs
+RUN node --version
+RUN npm --version

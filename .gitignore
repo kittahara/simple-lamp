@@ -12,6 +12,7 @@ gen
 
 application/*
 container/db/data/*
+container/https-portal/ssl_certs/*
 
 # ssl key
 container/app/config/ssl/apache*

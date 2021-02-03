@@ -2,15 +2,29 @@ version: '3.8'
 
 services:
 
+  # SSL
+  https-portal:
+    image: steveltn/https-portal:1
+    ports:
+      - '443:443'
+    links:
+      - app
+    restart: always
+    volumes:
+      - ./container/https-portal/ssl_certs:/var/lib/https-portal
+    environment:
+      DOMAINS:
+        'www.dev-simple-lamp.local -> http://app:80, admin.dev-simple-lamp.local -> http://app:80'
+      STAGE: 'local' # Don't use production until staging works
+      #FORCE_RENEW: 'true'
+
   # Application
   app:
-#    container_name: sl-app
     build:
       context: .
       dockerfile: ./container/app/Dockerfile
     ports:
       - "80:80"
-      - "443:443"
     working_dir: /usr/src/application
     volumes:
       - ./application:/usr/src/application
@@ -22,7 +36,6 @@ services:
 
   # DB
   db:
-#    container_name: sl-db
     build:
       context: .
       dockerfile: ./container/db/Dockerfile
@@ -40,7 +53,6 @@ services:
 
   # DB GUI
   adminer:
-#    container_name: sl-adminer
     image: adminer
     ports:
       - "8080:8080"
@@ -51,7 +63,6 @@ services:
 
   # Mail
   maildev:
-#    container_name: sl-maildev
     image: djfarrelly/maildev
     ports:
       - "1080:80"

@@ -5,6 +5,8 @@ services:
   # SSL
   https-portal:
     image: steveltn/https-portal:1
+    networks:
+      - frontend
     ports:
       - '443:443'
     links:
@@ -23,6 +25,9 @@ services:
     build:
       context: .
       dockerfile: ./container/app/Dockerfile
+    networks:
+      - frontend
+      - backend
     ports:
       - "80:80"
     working_dir: /usr/src/application
@@ -39,6 +44,8 @@ services:
     build:
       context: .
       dockerfile: ./container/db/Dockerfile
+    networks:
+      - backend
     ports:
       - "3306:3306"
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
@@ -54,6 +61,8 @@ services:
   # DB GUI
   adminer:
     image: adminer
+    networks:
+      - backend
     ports:
       - "8080:8080"
     environment:
@@ -64,6 +73,8 @@ services:
   # Mail
   maildev:
     image: djfarrelly/maildev
+    networks:
+      - frontend
     ports:
       - "1080:80"
       - "25:25"
@@ -73,3 +84,17 @@ services:
     command: bin/maildev --web 80 --smtp 25
     environment:
       TZ: JST-9
+
+networks:
+  frontend:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.10.0/24
+  backend:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.20.0/24

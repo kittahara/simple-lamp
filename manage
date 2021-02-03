@@ -2,9 +2,9 @@
 
 set -e # fail on any error
 
-APP_NAME="sl-app"
+APP_NAME="app"
 # TODO: your application path.
-APP_PATH="/usr/src/application/"
+APP_PATH="/usr/src/application/site/app/"
 
 case "$1" in
   "up" )
@@ -23,7 +23,7 @@ case "$1" in
     eval "docker restart ${@:2}"
     ;;
   "command" )
-    # ex) ./manage command sl-app
+    # ex) ./manage command app
     APP_NAME=${@:2}
     echo "----------------------------"
     echo "[$APP_NAME] waiting for command input..."
@@ -38,5 +38,8 @@ case "$1" in
     ;;
   "node" )
     eval "docker-compose exec $APP_NAME /bin/bash -c 'cd $APP_PATH && node ${@:2}'"
+    ;;
+  "artisan" )
+    eval "docker-compose exec $APP_NAME /bin/bash -c 'cd $APP_PATH && php artisan ${@:2}'"
     ;;
 esac

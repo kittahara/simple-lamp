@@ -1,11 +1,13 @@
-version: '2'
+version: '3.8'
 
 services:
 
   # Application
-  sl-app:
-    container_name: sl-app
-    build: ./container/app
+  app:
+#    container_name: sl-app
+    build:
+      context: .
+      dockerfile: ./container/app/Dockerfile
     ports:
       - "80:80"
       - "443:443"
@@ -15,13 +17,15 @@ services:
     environment:
       TZ: JST-9
     depends_on:
-      - sl-db
-      - sl-maildev
+      - db
+      - maildev
 
   # DB
-  sl-db:
-    container_name: sl-db
-    build: ./container/db
+  db:
+#    container_name: sl-db
+    build:
+      context: .
+      dockerfile: ./container/db/Dockerfile
     ports:
       - "3306:3306"
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
@@ -35,19 +39,19 @@ services:
       TZ: JST-9
 
   # DB GUI
-  sl-adminer:
-    container_name: sl-adminer
+  adminer:
+#    container_name: sl-adminer
     image: adminer
     ports:
       - "8080:8080"
     environment:
       TZ: JST-9
     depends_on:
-      - sl-db
+      - db
 
   # Mail
-  sl-maildev:
-    container_name: sl-maildev
+  maildev:
+#    container_name: sl-maildev
     image: djfarrelly/maildev
     ports:
       - "1080:80"

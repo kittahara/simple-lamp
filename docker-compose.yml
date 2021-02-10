@@ -6,7 +6,8 @@ services:
   https-portal:
     image: steveltn/https-portal:1
     networks:
-      - frontend
+      net:
+        ipv4_address: 10.0.0.35
     ports:
       - '443:443'
     links:
@@ -26,8 +27,8 @@ services:
       context: .
       dockerfile: ./container/app/Dockerfile
     networks:
-      - frontend
-      - backend
+      net:
+        ipv4_address: 10.0.0.10
     ports:
       - "80:80"
     working_dir: /usr/src/application
@@ -45,7 +46,8 @@ services:
       context: .
       dockerfile: ./container/db/Dockerfile
     networks:
-      - backend
+      net:
+        ipv4_address: 10.0.0.20
     ports:
       - "3306:3306"
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
@@ -62,7 +64,8 @@ services:
   adminer:
     image: adminer
     networks:
-      - backend
+      net:
+        ipv4_address: 10.0.0.31
     ports:
       - "8080:8080"
     environment:
@@ -74,7 +77,8 @@ services:
   maildev:
     image: djfarrelly/maildev
     networks:
-      - frontend
+      net:
+        ipv4_address: 10.0.0.32
     ports:
       - "1080:80"
       - "25:25"
@@ -86,15 +90,9 @@ services:
       TZ: JST-9
 
 networks:
-  frontend:
+  net:
     driver: bridge
     ipam:
       driver: default
       config:
-        - subnet: 192.168.10.0/24
-  backend:
-    driver: bridge
-    ipam:
-      driver: default
-      config:
-        - subnet: 192.168.20.0/24
+        - subnet: 10.0.0.0/16
